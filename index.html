@@ -6,7 +6,7 @@
     <title>TeachMe - Virtual Classroom</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
-       :root {
+      :root {
     --bg-dark: #202124;
     --bg-medium: #303134;
     --bg-light: #3c4043;
@@ -29,18 +29,19 @@ body {
     font-family: 'Google Sans', Arial, sans-serif;
     background-color: var(--bg-dark);
     color: var(--text-white);
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
-    border-radius: var(--border-radius-large);
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
+    position: relative;
 }
 
 .app-container {
     display: flex;
     flex-grow: 1;
-    overflow: hidden;
-    border-radius: var(--border-radius-large);
+    overflow-y: auto;
+    padding-bottom: 80px; /* Add padding to prevent content from being hidden behind bottom controls */
 }
 
 .video-grid {
@@ -48,7 +49,7 @@ body {
     grid-template-columns: 1fr;
     gap: 10px;
     padding: 10px;
-    flex-grow: 1;
+    width: 100%;
     background-color: var(--bg-dark);
     justify-items: center;
     align-items: center;
@@ -66,6 +67,7 @@ body {
     max-width: 800px;
     min-height: 500px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    margin-bottom: 20px; /* Add margin between participants if multiple */
 }
 
 .video-participant img {
@@ -96,6 +98,11 @@ body {
     align-items: center;
     padding: 10px;
     gap: 20px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
     border-top-left-radius: var(--border-radius-medium);
     border-top-right-radius: var(--border-radius-medium);
 }
@@ -130,7 +137,7 @@ body {
 }
 
 #chatBox {
-    position: absolute;
+    position: fixed;
     bottom: 60px;
     left: 50%;
     transform: translateX(-50%);
@@ -140,21 +147,13 @@ body {
     max-width: 80%;
     text-align: center;
     box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    z-index: 1000;
 }
 
 /* Mobile Responsive Styles */
 @media screen and (max-width: 768px) {
     body {
         font-size: 14px;
-    }
-
-    .app-container {
-        flex-direction: column;
-    }
-
-    .video-grid {
-        grid-template-columns: 1fr;
-        padding: 5px;
     }
 
     .video-participant {
@@ -164,13 +163,8 @@ body {
     }
 
     .video-participant img {
-        border-radius: 50%;
         max-width: 80%;
         max-height: 80%;
-    }
-
-    .participant-overlay {
-        padding: 8px;
     }
 
     .bottom-controls {
@@ -221,13 +215,6 @@ body {
     }
 }
 
-@media screen and (max-height: 600px) {
-    .video-participant {
-        min-height: 200px;
-    }
-}
-
-/* Additional touch-friendly adjustments */
 @media (pointer: coarse) {
     .control-button {
         min-width: 50px;

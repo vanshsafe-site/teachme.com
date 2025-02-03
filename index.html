@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeachMe - Virtual Classroom</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #202124;
+            --bg-medium: #303134;
+            --bg-light: #3c4043;
+            --primary-blue: #1a73e8;
+            --hover-blue: #1669c1;
+            --accent-red: #d93025;
+            --text-white: #ffffff;
+            --border-radius-large: 20px;
+            --border-radius-medium: 15px;
+            --border-radius-small: 10px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Google Sans', Arial, sans-serif;
+            background-color: #000;
+            color: var(--text-white);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            border-radius: var(--border-radius-large);
+            overflow: hidden;
+        }
+
+        .app-container {
+            display: flex;
+            flex-grow: 1;
+            overflow: hidden;
+            border-radius: var(--border-radius-large);
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            padding: 10px;
+            flex-grow: 1;
+            background-color: var(--bg-dark);
+            justify-items: center;
+            align-items: center;
+            border-radius: var(--border-radius-large);
+        }
+
+        .video-participant {
+            background-color: var(--bg-medium);
+            border-radius: var(--border-radius-large);
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            width: 80%;
+            max-width: 800px;
+            min-height: 500px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .video-participant img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: cover;
+            border-radius: var(--border-radius-large);
+        }
+
+        .participant-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.5);
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom-left-radius: var(--border-radius-large);
+            border-bottom-right-radius: var(--border-radius-large);
+        }
+
+        .bottom-controls {
+            background-color: var(--bg-medium);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            gap: 20px;
+            border-top-left-radius: var(--border-radius-medium);
+            border-top-right-radius: var(--border-radius-medium);
+        }
+
+        .control-button {
+            background-color: var(--bg-light);
+            border: none;
+            color: var(--text-white);
+            padding: 12px;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .control-button:hover {
+            background-color: var(--bg-light);
+            opacity: 0.8;
+        }
+
+        .control-button.active {
+            background-color: var(--accent-red);
+        }
+
+        .control-button i {
+            font-size: 20px;
+        }
+
+        #chatBox {
+            position: absolute;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.7);
+            padding: 10px;
+            border-radius: var(--border-radius-medium);
+            max-width: 80%;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="video-grid">
+            <div class="video-participant">
+                <img src="aarav.jpg" alt="Aarav">
+                <div id="chatBox">Aarav is waiting for your message...</div>
+                <div class="participant-overlay">
+                    <span>Aarav Kumar</span>
+                    <i class="fas fa-microphone-alt"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom-controls">
+        <button class="control-button" id="replyBtn">
+            <i class="fas fa-comment-dots"></i>
+        </button>
+        <button class="control-button" id="micBtn">
+            <i class="fas fa-microphone-alt"></i>
+        </button>
+        <button class="control-button" id="screenShareBtn">
+            <i class="fas fa-desktop"></i>
+        </button>
+        <button class="control-button" style="background-color: var(--accent-red);">
+            <i class="fas fa-phone-slash"></i>
+        </button>
+    </div>
+
+    <audio id="toggleSound" src="toggle-button-off-166328.mp3"></audio>
+    <audio id="messageSound" src="toggle-button-off-166328.mp3"></audio>
+
+    <script>
+       const messages = [
+    "Yes, I understand the concept.",
+    "Could you please elaborate on that point?",
+    "I'm ready to learn more.",
+    "Thank you for explaining it so clearly!",
+    "This is fascinating information.",
+    "Can we dive deeper into this subject?",
+    "I think I get it now, thanks!",
+    "This makes a lot of sense.",
+    "I appreciate the detailed explanation.",
+    "I’m following along so far.",
+    "I feel more confident about this now.",
+    "I’m definitely understanding it better.",
+    "This really clarifies things for me.",
+    "I didn't realize that before, that’s helpful.",
+    "I’m excited to apply this knowledge.",
+    "Thanks for breaking it down so simply.",
+    "I can see how this connects to what we learned earlier.",
+    "I think I need to revisit that point for better clarity.",
+    "I’m still a bit confused, but I’ll keep reviewing.",
+    "That was a great example to help explain it.",
+    "This is making more sense now, thank you.",
+    "I think I need some more practice with this.",
+    "It’s clear now how to approach this topic.",
+    "I didn’t understand it fully at first, but now it’s clear.",
+    "I need to work through this concept some more.",
+    "I think I’ll need more examples to fully grasp it.",
+    "I’m seeing the bigger picture now.",
+    "It’s definitely starting to click for me.",
+    "I’m a little lost on the details, though.",
+    "I’d appreciate more time to digest this information.",
+    "I need to review that step a bit more.",
+    "That was a lot of information to process!",
+    "I think I’m getting the hang of it now.",
+    "That explanation really helped solidify things.",
+    "I’m still not 100% sure about it, but I’ll try.",
+    "I think I understood most of that, just need to practice.",
+    "That was really helpful, thanks for the clarification.",
+    "I’ll need to go over the notes again, but it makes sense now.",
+    "This is definitely clearer than before.",
+    "I didn’t catch all of that, could you go over it again?",
+    "I’m still struggling a bit, but I’ll figure it out.",
+    "This feels like a solid foundation to build on.",
+    "It’s much clearer now, I just need to review the details.",
+    "I think I’ve got the gist of it now.",
+    "That was a great explanation; I feel more confident now.",
+    "I think I understand the general idea, just need more practice.",
+    "I’m not quite there yet, but I’m getting closer.",
+    "I feel like I understand the steps now, just need to apply them.",
+    "I still need some help with this concept, but I’m getting there.",
+    "I can see how this will be useful once I get the hang of it.",
+    "That makes a lot more sense now, thank you!",
+    "I think I’m almost there, just need a bit more practice.",
+    "I’m definitely on the right track now, thanks for the help.",
+    "I’m starting to see how this all connects.",
+    "I think I’m beginning to understand this topic now.",
+    "This is really helping me build my understanding.",
+    "I feel more confident now, thanks!",
+    "I’m still trying to wrap my head around it.",
+    "It’s clearer now, but I’ll need to review a few times.",
+    "I think I need a bit more time to grasp this fully.",
+    "That explanation made things much clearer, thanks!",
+    "I feel like I’m almost there, just a few more steps.",
+    "I’m getting the general idea, just need some more practice.",
+    "I’m definitely more confident about this now.",
+    "This helps to reinforce what I’ve learned.",
+    "I think I have a better understanding now.",
+    "I’m starting to feel more comfortable with this material.",
+    "This is making a lot more sense now.",
+    "I think I’ve got it now, I just need to keep practicing.",
+    "I’m really starting to grasp the concept now.",
+    "I’m beginning to feel more confident with the topic.",
+    "I think I understand the basic idea now.",
+    "This is helping me see things from a different perspective.",
+    "I feel more comfortable with the material after that explanation.",
+    "I’ll need to work on that a little more, but I’m getting it.",
+    "I think I just need to review this a bit more on my own.",
+    "I understand it now, just need to solidify it in my mind.",
+    "That cleared up a lot for me, thank you!",
+    "I feel like I’m getting better at understanding this.",
+    "That makes sense, I just need to practice more.",
+    "I’m starting to feel more confident in my understanding.",
+    "I’ll keep practicing, I’m sure I’ll get it soon.",
+    "I think I need to take it slow and review it again.",
+    "I need a little more time with this concept.",
+    "I’m starting to put the pieces together.",
+    "That example really helped me understand better.",
+    "I think I’m starting to catch on now.",
+    "This is definitely starting to make sense.",
+    "I feel like I’m on the right track now.",
+    "I think I just need a little more time with it.",
+    "I need to go over it again, but I’m getting there.",
+    "I understand the basics now, just need to focus on the details.",
+    "I need a little more time to absorb this concept.",
+    "That really helped me understand it better.",
+    "I’m starting to feel more comfortable with this idea.",
+    "I’m really starting to get the hang of this topic.",
+    "That cleared up some confusion, thank you!",
+    "I think I’m on the right path now, just need more practice.",
+    "I think I’m understanding the topic a lot better now.",
+    "I can see how this works now, just need to refine it.",
+    "That makes much more sense to me now, thanks!",
+    "I’m starting to feel confident with this material.",
+    "I just need to practice this concept a little more.",
+    "I’m beginning to understand the overall picture now.",
+    "I’m starting to understand this in a deeper way."
+];
+
+        const chatBox = document.getElementById('chatBox');
+        const replyBtn = document.getElementById('replyBtn');
+        const micBtn = document.getElementById('micBtn');
+        const screenShareBtn = document.getElementById('screenShareBtn');
+        const toggleSound = document.getElementById('toggleSound');
+        const messageSound = document.getElementById('messageSound');
+    
+        replyBtn.addEventListener('click', () => {
+            const message = messages[Math.floor(Math.random() * messages.length)];
+            chatBox.textContent = `Aarav: ${message}`;
+            messageSound.play();
+            speak(message);
+        });
+    
+        micBtn.addEventListener('click', () => {
+            micBtn.classList.toggle('active');
+    
+            if (micBtn.classList.contains('active')) {
+                micBtn.innerHTML = '<i class="fas fa-microphone"></i>';
+            } else {
+                micBtn.innerHTML = '<i class="fas fa-microphone-slash"></i>';
+            }
+    
+            toggleSound.play();
+        });
+    
+        screenShareBtn.addEventListener('click', () => {
+            screenShareBtn.classList.toggle('active');
+    
+            if (screenShareBtn.classList.contains('active')) {
+                screenShareBtn.innerHTML = '<i class="fas fa-desktop"></i>';
+            } else {
+                screenShareBtn.innerHTML = '<i class="fas fa-desktop"></i>';
+            }
+    
+            toggleSound.play();
+        });
+    
+        function speak(text) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.rate = 0.9;
+            utterance.pitch = 1.1;
+            
+            // Using the default system voice
+            speechSynthesis.speak(utterance);
+        }
+    
+        // Preload voices
+        speechSynthesis.onvoiceschanged = () => {
+            speechSynthesis.getVoices();
+        };
+    </script>
+    
+</body>
+</html>

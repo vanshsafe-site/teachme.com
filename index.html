@@ -41,7 +41,7 @@ body {
     display: flex;
     flex-grow: 1;
     overflow-y: auto;
-    padding-bottom: 80px; /* Add padding to prevent content from being hidden behind bottom controls */
+    padding-bottom: 80px;
 }
 
 .video-grid {
@@ -67,7 +67,7 @@ body {
     max-width: 800px;
     min-height: 500px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    margin-bottom: 20px; /* Add margin between participants if multiple */
+    margin-bottom: 20px;
 }
 
 .video-participant img {
@@ -138,16 +138,27 @@ body {
 
 #chatBox {
     position: fixed;
-    bottom: 60px;
+    bottom: 80px;
     left: 50%;
     transform: translateX(-50%);
-    background: rgba(0,0,0,0.7);
-    padding: 10px;
+    background: rgba(0,0,0,0.8);
+    padding: 15px;
     border-radius: var(--border-radius-medium);
-    max-width: 80%;
+    max-width: 90%;
+    width: auto;
     text-align: center;
     box-shadow: 0 4px 6px rgba(0,0,0,0.2);
     z-index: 1000;
+    word-wrap: break-word;
+    white-space: normal;
+    line-height: 1.5;
+    font-size: 16px;
+    min-height: 50px;
+    max-height: 200px;
+    overflow-y: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* Mobile Responsive Styles */
@@ -182,10 +193,11 @@ body {
     }
 
     #chatBox {
-        max-width: 90%;
-        bottom: 50px;
-        padding: 8px;
-        font-size: 12px;
+        bottom: 70px;
+        max-width: 95%;
+        padding: 12px;
+        font-size: 15px;
+        max-height: 150px;
     }
 }
 
@@ -208,10 +220,11 @@ body {
     }
 
     #chatBox {
-        max-width: 95%;
-        bottom: 45px;
-        padding: 6px;
-        font-size: 11px;
+        bottom: 60px;
+        max-width: 98%;
+        padding: 10px;
+        font-size: 14px;
+        max-height: 120px;
     }
 }
 
@@ -226,6 +239,7 @@ body {
         font-size: 18px;
     }
 }
+
     </style>
 </head>
 <body>

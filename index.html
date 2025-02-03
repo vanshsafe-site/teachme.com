@@ -6,142 +6,239 @@
     <title>TeachMe - Virtual Classroom</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
-        :root {
-            --bg-dark: #202124;
-            --bg-medium: #303134;
-            --bg-light: #3c4043;
-            --primary-blue: #1a73e8;
-            --hover-blue: #1669c1;
-            --accent-red: #d93025;
-            --text-white: #ffffff;
-            --border-radius-large: 20px;
-            --border-radius-medium: 15px;
-            --border-radius-small: 10px;
-        }
+       :root {
+    --bg-dark: #202124;
+    --bg-medium: #303134;
+    --bg-light: #3c4043;
+    --primary-blue: #1a73e8;
+    --hover-blue: #1669c1;
+    --accent-red: #d93025;
+    --text-white: #ffffff;
+    --border-radius-large: 20px;
+    --border-radius-medium: 15px;
+    --border-radius-small: 10px;
+}
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
-        body {
-            font-family: 'Google Sans', Arial, sans-serif;
-            background-color: var(--bg-dark);
-            color: var(--text-white);
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            border-radius: var(--border-radius-large);
-            overflow: hidden;
-        }
+body {
+    font-family: 'Google Sans', Arial, sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-white);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--border-radius-large);
+    overflow: hidden;
+}
 
-        .app-container {
-            display: flex;
-            flex-grow: 1;
-            overflow: hidden;
-            border-radius: var(--border-radius-large);
-        }
+.app-container {
+    display: flex;
+    flex-grow: 1;
+    overflow: hidden;
+    border-radius: var(--border-radius-large);
+}
 
-        .video-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 10px;
-            padding: 10px;
-            flex-grow: 1;
-            background-color: var(--bg-dark);
-            justify-items: center;
-            align-items: center;
-        }
+.video-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 10px;
+    flex-grow: 1;
+    background-color: var(--bg-dark);
+    justify-items: center;
+    align-items: center;
+}
 
-        .video-participant {
-            background-color: var(--bg-medium);
-            border-radius: var(--border-radius-large);
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            width: 80%;
-            max-width: 800px;
-            min-height: 500px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-             ;
-        }
+.video-participant {
+    background-color: var(--bg-medium);
+    border-radius: var(--border-radius-large);
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    width: 80%;
+    max-width: 800px;
+    min-height: 500px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
 
-        .video-participant img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: cover;
-            border-radius: 50%;
-        }
+.video-participant img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
 
-        .participant-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(0,0,0,0.5);
-            padding: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom-left-radius: var(--border-radius-large);
-            border-bottom-right-radius: var(--border-radius-large);
-        }
+.participant-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0,0,0,0.5);
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom-left-radius: var(--border-radius-large);
+    border-bottom-right-radius: var(--border-radius-large);
+}
 
-        .bottom-controls {
-            background-color: var(--bg-medium);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 10px;
-            gap: 20px;
-            border-top-left-radius: var(--border-radius-medium);
-            border-top-right-radius: var(--border-radius-medium);
-        }
+.bottom-controls {
+    background-color: var(--bg-medium);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    gap: 20px;
+    border-top-left-radius: var(--border-radius-medium);
+    border-top-right-radius: var(--border-radius-medium);
+}
 
-        .control-button {
-            background-color: var(--bg-light);
-            border: none;
-            color: var(--text-white);
-            padding: 12px;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
+.control-button {
+    background-color: var(--bg-light);
+    border: none;
+    color: var(--text-white);
+    padding: 12px;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
 
-        .control-button:hover {
-            background-color: var(--bg-light);
-            opacity: 0.8;
-        }
+.control-button:hover {
+    background-color: var(--bg-light);
+    opacity: 0.8;
+}
 
-        .control-button.active {
-            background-color: var(--accent-red);
-        }
+.control-button.active {
+    background-color: var(--accent-red);
+}
 
-        .control-button i {
-            font-size: 20px;
-        }
+.control-button i {
+    font-size: 20px;
+}
 
-        #chatBox {
-            position: absolute;
-            bottom: 60px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0,0,0,0.7);
-            padding: 10px;
-            border-radius: var(--border-radius-medium);
-            max-width: 80%;
-            text-align: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-        }
+#chatBox {
+    position: absolute;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.7);
+    padding: 10px;
+    border-radius: var(--border-radius-medium);
+    max-width: 80%;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+}
+
+/* Mobile Responsive Styles */
+@media screen and (max-width: 768px) {
+    body {
+        font-size: 14px;
+    }
+
+    .app-container {
+        flex-direction: column;
+    }
+
+    .video-grid {
+        grid-template-columns: 1fr;
+        padding: 5px;
+    }
+
+    .video-participant {
+        width: 95%;
+        min-height: 300px;
+        max-width: 100%;
+    }
+
+    .video-participant img {
+        border-radius: 50%;
+        max-width: 80%;
+        max-height: 80%;
+    }
+
+    .participant-overlay {
+        padding: 8px;
+    }
+
+    .bottom-controls {
+        gap: 10px;
+        padding: 8px;
+    }
+
+    .control-button {
+        width: 40px;
+        height: 40px;
+    }
+
+    .control-button i {
+        font-size: 16px;
+    }
+
+    #chatBox {
+        max-width: 90%;
+        bottom: 50px;
+        padding: 8px;
+        font-size: 12px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .video-participant {
+        min-height: 250px;
+    }
+
+    .bottom-controls {
+        gap: 5px;
+    }
+
+    .control-button {
+        width: 35px;
+        height: 35px;
+    }
+
+    .control-button i {
+        font-size: 14px;
+    }
+
+    #chatBox {
+        max-width: 95%;
+        bottom: 45px;
+        padding: 6px;
+        font-size: 11px;
+    }
+}
+
+@media screen and (max-height: 600px) {
+    .video-participant {
+        min-height: 200px;
+    }
+}
+
+/* Additional touch-friendly adjustments */
+@media (pointer: coarse) {
+    .control-button {
+        min-width: 50px;
+        min-height: 50px;
+        padding: 15px;
+    }
+
+    .control-button i {
+        font-size: 18px;
+    }
+}
     </style>
 </head>
 <body>
